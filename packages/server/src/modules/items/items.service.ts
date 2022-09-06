@@ -9,16 +9,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class ItemsService {
   constructor(
     @InjectRepository(ItemsEntity)
-    private userRepository: Repository<ItemsEntity>
+    private itemsRepository: Repository<ItemsEntity>
   ) {}
 
   async findAll(): Promise<ItemsResource[]> {
-    const items = await this.userRepository.find();
+    const items = await this.itemsRepository.find();
     return items.map(ItemsResource.fromEntity);
   }
 
   async findById(id: number): Promise<ItemsResource> {
-    const item = await this.userRepository.findOne({
+    const item = await this.itemsRepository.findOne({
       where: { id },
     });
     if (!item){
@@ -28,26 +28,26 @@ export class ItemsService {
   }
 
   async create(data: ItemCreateUpdateDto): Promise<ItemsResource> {
-    const item: ItemsEntity = this.userRepository.create({
+    const item: ItemsEntity = this.itemsRepository.create({
       ...data,
     });
-    await this.userRepository.save(item);
+    await this.itemsRepository.save(item);
     return ItemsResource.fromEntity(item);
   }
 
   async update(id: number, data: ItemCreateUpdateDto): Promise<ItemsResource> {
-    const item = await this.userRepository.findOne({
+    const item = await this.itemsRepository.findOne({
       where: { id },
     });
     if (!item) {
       throw new NotFoundException('item not exist');
     }
-    this.userRepository.merge(item, data);
-    await this.userRepository.save(item);
+    this.itemsRepository.merge(item, data);
+    await this.itemsRepository.save(item);
     return ItemsResource.fromEntity(item);
   }
 
   async delete(id: number) {
-    await this.userRepository.delete({ id });
+    await this.itemsRepository.delete({ id });
   }
 }
