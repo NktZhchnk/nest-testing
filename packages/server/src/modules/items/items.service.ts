@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { ItemsResource } from './items.resource';
+import { ItemsResource, ItemResourceRaw } from './items.resource';
 import { ItemsEntity } from './items.entity';
-import { ItemCreateUpdateDto } from './dto/item-create-update.dto';
+import { ItemCreateUpdateDto } from '@core/dto/item';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -12,12 +12,12 @@ export class ItemsService {
     private itemsRepository: Repository<ItemsEntity>
   ) {}
 
-  async findAll(): Promise<ItemsResource[]> {
+  async findAll(): Promise<ItemResourceRaw[]> {
     const items = await this.itemsRepository.find();
     return items.map(ItemsResource.fromEntity);
   }
 
-  async findById(id: number): Promise<ItemsResource> {
+  async findById(id: number): Promise<ItemResourceRaw> {
     const item = await this.itemsRepository.findOne({
       where: { id },
     });
@@ -27,7 +27,7 @@ export class ItemsService {
     return ItemsResource.fromEntity(item);
   }
 
-  async create(data: ItemCreateUpdateDto): Promise<ItemsResource> {
+  async create(data: ItemCreateUpdateDto): Promise<ItemResourceRaw> {
     const item: ItemsEntity = this.itemsRepository.create({
       ...data,
     });
@@ -35,7 +35,7 @@ export class ItemsService {
     return ItemsResource.fromEntity(item);
   }
 
-  async update(id: number, data: ItemCreateUpdateDto): Promise<ItemsResource> {
+  async update(id: number, data: ItemCreateUpdateDto): Promise<ItemResourceRaw> {
     const item = await this.itemsRepository.findOne({
       where: { id },
     });

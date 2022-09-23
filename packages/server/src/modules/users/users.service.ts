@@ -2,8 +2,8 @@ import { Injectable, NotFoundException, UnprocessableEntityException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './users.entity';
 import { Repository } from 'typeorm';
-import { UserCreateDto, UserUpdateDto, UserUpdatePasswordDto } from './dto';
-import { UsersResource } from './users.resource';
+import { UserCreateDto, UserUpdateDto, UserUpdatePasswordDto } from '@core/dto/user';
+import { UsersResource, UserResourceRaw } from './users.resource';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class UsersService {
       private usersRepository: Repository<UsersEntity>
     ) {}
 
-    async register(data: UserCreateDto): Promise<UsersResource> {
+    async register(data: UserCreateDto): Promise<UserResourceRaw> {
         const user: UsersEntity = this.usersRepository.create({
             ...data,
             password: await this.hashPassword(data.password),
@@ -22,7 +22,7 @@ export class UsersService {
         return UsersResource.fromEntity(user);
     }
 
-    async findById(id: number): Promise<UsersResource> {
+    async findById(id: number): Promise<UserResourceRaw> {
         const user: UsersEntity = await this.usersRepository.findOne({
             where: { id },
         });
@@ -32,7 +32,7 @@ export class UsersService {
         return UsersResource.fromEntity(user);
     }
 
-    async findByUsername(username: string): Promise<UsersResource> {
+    async findByUsername(username: string): Promise<UserResourceRaw> {
         const user: UsersEntity = await this.usersRepository.findOne({
             where: { username },
         });
@@ -42,7 +42,7 @@ export class UsersService {
         return UsersResource.fromEntity(user);
     }
 
-    async findByUsernameAndCheckPassword(username: string, password: string): Promise<UsersResource|null> {
+    async findByUsernameAndCheckPassword(username: string, password: string): Promise<UserResourceRaw|null> {
         const user: UsersEntity = await this.usersRepository.findOne({
             where: { username },
         });
@@ -52,7 +52,7 @@ export class UsersService {
         return UsersResource.fromEntity(user);
     }
 
-    async update(id: number, data: UserUpdateDto): Promise<UsersResource> {
+    async update(id: number, data: UserUpdateDto): Promise<UserResourceRaw> {
         const user: UsersEntity = await this.usersRepository.findOne({
             where: { id }
         });

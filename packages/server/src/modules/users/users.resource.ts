@@ -1,12 +1,9 @@
 import { UsersEntity } from './users.entity';
+import { UserResource as UserResourceRaw } from '@core/resources/user';
 
-export class UsersResource {
-  id: number;
-  username: string;
-  first_name: string;
-  last_name: string;
-
-  static fromEntity(userEntity: UsersEntity): UsersResource {
+export { UserResourceRaw };
+export class UsersResource extends UserResourceRaw {
+  static fromEntity(userEntity: UsersEntity): UserResourceRaw {
     return {
       id: userEntity.id,
       username: userEntity.username,

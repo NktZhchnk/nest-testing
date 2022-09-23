@@ -1,12 +1,9 @@
 import { ItemsEntity } from './items.entity';
+import { ItemResource as ItemResourceRaw } from '@core/resources/item'
 
-export class ItemsResource {
-  id: number;
-  name: string;
-  count: number;
-  price: number;
-
-  static fromEntity(itemEntity: ItemsEntity): ItemsResource {
+export { ItemResourceRaw };
+export class ItemsResource extends ItemResourceRaw{
+  static fromEntity(itemEntity: ItemsEntity): ItemResourceRaw {
     return {
       id: itemEntity.id,
       name: itemEntity.name,

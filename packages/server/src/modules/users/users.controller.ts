@@ -2,8 +2,9 @@ import { Body, Controller, Get, Post, Put, Request, UseGuards, UsePipes } from '
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JoiValidationPipe } from '../../pipes/joi-validation.pipe';
-import { UserCreateDto, UserUpdateDto, UserUpdatePasswordDto } from './dto';
-import { userUpdatePasswordSchema, userCreateSchema, userUpdateSchema } from './validation';
+import { UserCreateDto, UserUpdateDto, UserUpdatePasswordDto } from '@core/dto/user';
+import { userUpdatePasswordSchema, userCreateSchema, userUpdateSchema } from '@core/validation/user';
+import { UserResource } from '@core/resources/user';
 
 @Controller('users')
 export class UsersController {
@@ -17,7 +18,7 @@ export class UsersController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  getProfile(@Request() req) {
+  getProfile(@Request() req): Promise<UserResource> {
     return req.user;
   }
 

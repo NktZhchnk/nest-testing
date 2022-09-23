@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes } 
 import { ItemsService } from './items.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JoiValidationPipe } from '../../pipes/joi-validation.pipe';
-import { itemCreateUpdateSchema } from './validation/item-create-update.schema';
-import { ItemCreateUpdateDto } from './dto/item-create-update.dto';
+import { itemCreateUpdateSchema } from '@core/validation/item';
+import { ItemCreateUpdateDto } from '@core/dto/item';
 
 @Controller('items')
 export class ItemsController {
